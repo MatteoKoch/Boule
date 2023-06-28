@@ -2,6 +2,8 @@
 
 session_start();
 
+require_once "lang/de.php";
+
 if(!isset($_SESSION['admin'])) {
     header("Location: login");
     die();
@@ -33,7 +35,7 @@ if(!isset($_SESSION['admin'])) {
                     <div class="team-members"></div>
                 </div>
             </div>
-            <button type="button" onclick="addTeam()">Speichern / Team hinzuf&uuml;gen</button>
+            <button type="button" onclick="addTeam()"><?= $lang['TEAMS_ERSTELLEN_SPEICHERN'] ?></button>
             <a href="create_games.php">Weiter zur Aufstellung</a>
         </form>
 

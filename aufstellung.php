@@ -8,6 +8,7 @@ if(!isset($_SESSION['admin'])) {
 }
 
 require_once "db_conn.php";
+require_once "lang/de.php";
 
 ?>
 
@@ -22,9 +23,9 @@ require_once "db_conn.php";
     <?php require_once "header.php"; ?>
 
         <div style="display: grid; gap: 50px;">
-            <table class="spiel">
+            <table class="spiel" style="min-width: 800px;">
                 <thead>
-                    <tr><td colspan="3" style="text-align: center; font-weight: bold;">Aufstellung (Runde Nr. <?= $_SESSION['runde'] ?>)</td></tr>
+                    <tr><td colspan="3" style="text-align: center; font-weight: bold;"><?= $lang['AUFSTELLUNG_SPIELSTAND'] ?> (Runde Nr. <?= $_SESSION['runde'] ?>)</td></tr>
                 </thead>
                 <tbody>
                     <?php

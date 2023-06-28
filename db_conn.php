@@ -1,12 +1,13 @@
 <?php
 
-    $sname = "localhost";
-    $uname = "root";
-    $password = "";
+$sname = "db5005567525.hosting-data.io";
+$uname = "dbu985699";
+$password = "Mamemo1234567";
 
-    $db_name = "boule_turnier";
+$db_name = "dbs4680886";
 
-    $conn = mysqli_connect($sname, $uname, $password, $db_name);
+
+$conn = mysqli_connect($sname, $uname, $password, $db_name);
 
     if(!$conn) {
         echo "Verbindung fehlgeschlagen!";

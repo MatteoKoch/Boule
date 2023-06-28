@@ -23,7 +23,7 @@ require_once "db_conn.php";
     <?php require_once "header.php"; ?>
 
         <div style="display: grid; gap: 50px;">
-            <table class="aufstellung">
+            <table class="aufstellung" style="min-width: 800px;">
                 <thead>
                 <tr><td colspan="4" style="text-align: center; font-weight: bold;">Spielstand (Runde Nr. <?= $_SESSION['runde'] ?>)</td></tr>
                 </thead>
