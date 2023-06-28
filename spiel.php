@@ -16,6 +16,7 @@ require_once "db_conn.php";
     <head>
         <title>Spielstand</title>
         <link href="styles/style.css" rel="stylesheet" type="text/css">
+        <script src="scripts/spiel.js" defer></script>
     </head>
     <body>
 
@@ -27,7 +28,14 @@ require_once "db_conn.php";
                 <tbody>
                 <?php
 
-                $sql_teams = $conn->prepare("SELECT * FROM spiele");
+                $sql_number_teams = $conn->prepare("SELECT count(id) as anz FROM teams");
+                $sql_number_teams->execute();
+                $res_number_teams = $sql_number_teams->get_result();
+                $number_of_teams = intval($res_number_teams->fetch_assoc()['anz'])/2;
+                $sql_number_teams->close();
+
+                $sql_teams = $conn->prepare("SELECT * FROM spiele ORDER BY id DESC LIMIT ?");
+                $sql_teams->bind_param("i", $number_of_teams);
                 $sql_teams->execute();
                 $res_teams = $sql_teams->get_result();
                 $sql_teams->close();
@@ -37,7 +45,7 @@ require_once "db_conn.php";
                 $sql_team_names = $conn->prepare("SELECT * FROM teams WHERE id = ?");
                 $sql_members = $conn->prepare("SELECT * FROM teams_mitglieder WHERE teams_id = ?");
                 for($i = 0; $i < count($teams); $i++) {
-                    echo "<tr data-id='{$teams[$i][1]}-{$teams[$i][3]}'>\n";
+                    echo "<tr data-id='{$teams[$i][0]}'>\n";
 
                         echo "<td>\n";
                             $sql_team_names->bind_param("i", $teams[$i][1]);
@@ -54,7 +62,7 @@ require_once "db_conn.php";
                             echo "</span>\n";
                         echo "</td>\n";
 
-                        echo "<td style='width: 50px; padding: 0; text-align: center; font-weight: bold;' id='team[{$teams[$i][1]}]' contenteditable='true'></td>\n";
+                        echo "<td style='width: 50px; padding: 0; text-align: center; font-weight: bold;' id='team[{$teams[$i][0]}][{$teams[$i][1]}]' contenteditable='true'>{$teams[$i][2]}</td>\n";
 
                         echo "<td>\n";
                             $sql_team_names->bind_param("i", $teams[$i][3]);
@@ -71,7 +79,7 @@ require_once "db_conn.php";
                             echo "</span>\n";
                         echo "</td>\n";
 
-                        echo "<td style='width: 50px; padding: 0; text-align: center; font-weight: bold;' id='team[{$teams[$i][3]}]' contenteditable='true'></td>\n";
+                        echo "<td style='width: 50px; padding: 0; text-align: center; font-weight: bold;' id='team[{$teams[$i][0]}][{$teams[$i][3]}]' contenteditable='true'>{$teams[$i][4]}</td>\n";
 
                     echo "</tr>\n";
                 }
@@ -83,6 +91,7 @@ require_once "db_conn.php";
             </table>
 
             <button onclick="savePoints()">Punktestand Speichern</button>
+            <a href="rangliste.php">Zur Rangliste und n&auml;chsten Runde</a>
 
         </div>
 

@@ -27,7 +27,14 @@ require_once "db_conn.php";
                 <tbody>
                     <?php
 
-                    $sql_teams = $conn->prepare("SELECT * FROM spiele");
+                    $sql_number_teams = $conn->prepare("SELECT count(id) as anz FROM teams");
+                    $sql_number_teams->execute();
+                    $res_number_teams = $sql_number_teams->get_result();
+                    $number_of_teams = intval($res_number_teams->fetch_assoc()['anz'])/2;
+                    $sql_number_teams->close();
+
+                    $sql_teams = $conn->prepare("SELECT * FROM spiele ORDER BY id DESC LIMIT ?");
+                    $sql_teams->bind_param("i", $number_of_teams);
                     $sql_teams->execute();
                     $res_teams = $sql_teams->get_result();
                     $sql_teams->close();
@@ -37,7 +44,7 @@ require_once "db_conn.php";
                     $sql_team_names = $conn->prepare("SELECT * FROM teams WHERE id = ?");
                     $sql_members = $conn->prepare("SELECT * FROM teams_mitglieder WHERE teams_id = ?");
                     for($i = 0; $i < count($teams); $i++) {
-                        echo "<tr data-id='{$teams[$i][1]}-{$teams[$i][3]}'>\n";
+                        echo "<tr data-id='{$teams[$i][0]}'>\n";
 
                             echo "<td>\n";
                                 $sql_team_names->bind_param("i", $teams[$i][1]);
