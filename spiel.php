@@ -20,10 +20,12 @@ require_once "db_conn.php";
     </head>
     <body>
 
+    <?php require_once "header.php"; ?>
+
         <div style="display: grid; gap: 50px;">
             <table class="aufstellung">
                 <thead>
-                <tr><td colspan="4" style="text-align: center; font-weight: bold;">Spielstand</td></tr>
+                <tr><td colspan="4" style="text-align: center; font-weight: bold;">Spielstand (Runde Nr. <?= $_SESSION['runde'] ?>)</td></tr>
                 </thead>
                 <tbody>
                 <?php
@@ -90,8 +92,10 @@ require_once "db_conn.php";
                 </tbody>
             </table>
 
-            <button onclick="savePoints()">Punktestand Speichern</button>
-            <a href="rangliste.php">Zur Rangliste und n&auml;chsten Runde</a>
+            <div class="col2 gap20">
+                <button onclick="savePoints()">Speichern</button>
+                <a onclick="savePoints(true)">Speichern und zur n&auml;chsten Runde</a>
+            </div>
 
         </div>
 

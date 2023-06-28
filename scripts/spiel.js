@@ -1,6 +1,11 @@
-function savePoints() {
+function savePoints(href=false) {
     var save = new XMLHttpRequest();
     save.open("POST", "save_points.php", true);
+    save.onload = () => {
+        if(href) {
+            window.location = "rangliste";
+        }
+    }
     save.send(getInputs());
 }
 function getInputs() {

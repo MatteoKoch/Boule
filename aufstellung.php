@@ -19,10 +19,12 @@ require_once "db_conn.php";
     </head>
     <body>
 
+    <?php require_once "header.php"; ?>
+
         <div style="display: grid; gap: 50px;">
             <table class="spiel">
                 <thead>
-                    <tr><td colspan="2" style="text-align: center; font-weight: bold;">Aufstellung</td></tr>
+                    <tr><td colspan="3" style="text-align: center; font-weight: bold;">Aufstellung (Runde Nr. <?= $_SESSION['runde'] ?>)</td></tr>
                 </thead>
                 <tbody>
                     <?php
@@ -60,6 +62,8 @@ require_once "db_conn.php";
                                     }
                                 echo "</span>\n";
                             echo "</td>\n";
+
+                            echo "<td style='width: 60px;'>gegen</td>\n";
 
                             echo "<td>\n";
                         $sql_team_names->bind_param("i", $teams[$i][3]);

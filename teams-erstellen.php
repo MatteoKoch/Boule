@@ -18,6 +18,8 @@ if(!isset($_SESSION['admin'])) {
     </head>
     <body style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px;">
 
+        <?php require_once "header.php"; ?>
+
         <div id="teams">
             <?php require_once "zeige-teams.php"; ?>
         </div>

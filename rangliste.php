@@ -19,10 +19,12 @@ require_once "db_conn.php";
 </head>
 <body>
 
+<?php require_once "header.php"; ?>
+
 <div style="display: grid; gap: 50px;">
     <table class="spiel">
         <thead>
-        <tr><td colspan="3" style="text-align: center; font-weight: bold;">Rangliste</td></tr>
+        <tr><td colspan="3" style="text-align: center; font-weight: bold;">Rangliste (Runde Nr. <?= $_SESSION['runde'] ?>)</td></tr>
         <tr>
             <td style="font-weight: bold">Position</td>
             <td style="font-weight: bold">Team</td>
@@ -65,7 +67,8 @@ require_once "db_conn.php";
         foreach($points as $key => $team) {
             echo "<tr>\n";
 
-            echo "<td style='width: 100px; font-weight: bold;'>{$key}.</td>\n";
+            $keypone = $key+1;
+            echo "<td style='width: 100px; font-weight: bold;'>{$keypone}.</td>\n";
 
             echo "<td>\n";
             $sql_team_names->bind_param("i", $team[0]);
@@ -93,7 +96,18 @@ require_once "db_conn.php";
         </tbody>
     </table>
 
-    <a href="spiel">Weiter zur n&auml;chsten Runde</a>
+    <div class="col2 gap20">
+        <a href="drucken"">Rangliste drucken</a>
+        <form action="create_games.php" method="post">
+            <?php
+            foreach($points as $key => $team) {
+                echo "<input type='hidden' name='points[{$key}][0]' value='{$team[0]}'>\n";
+                echo "<input type='hidden' name='points[{$key}][1]' value='{$team[1]}'>\n";
+            }
+            ?>
+            <button type="submit">Weiter zur n&auml;chsten Runde</button>
+        </form>
+    </div>
 
 </div>
 
