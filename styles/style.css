@@ -88,3 +88,30 @@ form {
     flex-direction: column;
     gap: 6px;
 }
+
+.aufstellung tbody tr {
+    cursor: pointer;
+}
+
+.aufstellung tbody tr td:hover {
+    background: #dadada;
+    border: 3px solid #0a0a0a;
+}
+
+.aufstellung tbody tr td {
+}
+
+#punkte {
+    display: none;
+    gap: 10px;
+}
+
+#punkte.active {
+    display: grid;
+}
+
+#punkte .punkte-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
