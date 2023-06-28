@@ -1,0 +1,90 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+}
+
+body {
+    padding: 50px;
+    background: radial-gradient(lightblue, dodgerblue);
+}
+
+* {
+    font-size: 25px;
+    box-sizing: border-box;
+    font-family: 'Helvetica';
+}
+
+table {
+    border: 4px solid #333;
+    width: 800px;
+    background: #f6f6fa;
+}
+
+table td {
+    border: 3px solid #444;
+    padding: 6px 14px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input {
+    padding: 4px;
+    font-size: 20px;
+}
+
+input::placeholder {
+    font-style: italic;
+}
+
+button,
+a {
+    cursor: pointer;
+}
+
+button {
+    padding: 6px 10px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;;
+    gap: 30px;
+}
+
+.form-wrapper {
+    display: flex;
+    flex-direction: column;;
+    gap: 20px;
+    width: 800px;
+}
+
+.form-wrapper .team-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 150px;
+}
+
+.form-wrapper .team-block:not(:first-child) {
+    border-top: 4px solid #333;
+}
+
+.form-wrapper .team-block .team-members {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-wrapper .team-block .team-members .team-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
