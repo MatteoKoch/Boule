@@ -57,21 +57,21 @@ require_once "lang/de.php";
         while($row_points = $res_all_teams->fetch_assoc()) {
             $sum = 0;
             $won = 0;
-            $sql_score1 = $conn->prepare("SELECT team_1_punkte, team_2_punkte FROM spiele WHERE team_1_id = ? AND team_1_punkte > team_2_punkte");
+            $sql_score1 = $conn->prepare("SELECT team_1_punkte, team_2_punkte FROM spiele WHERE team_1_id = ?");
             $sql_score1->bind_param("i", $row_points['id']);
             $sql_score1->execute();
             $res_score1 = $sql_score1->get_result();
             while($row_score1 = $res_score1->fetch_assoc()) {
                 $sum += $row_score1['team_1_punkte'] - $row_score1['team_2_punkte'];
-                $won++;
+                if($row_score1['team_1_punkte'] > $row_score1['team_2_punkte']) $won++;
             }
-            $sql_score2 = $conn->prepare("SELECT team_1_punkte, team_2_punkte FROM spiele WHERE team_2_id = ? AND team_1_punkte < team_2_punkte");
+            $sql_score2 = $conn->prepare("SELECT team_1_punkte, team_2_punkte FROM spiele WHERE team_2_id = ?");
             $sql_score2->bind_param("i", $row_points['id']);
             $sql_score2->execute();
             $res_score2 = $sql_score2->get_result();
             while($row_score2 = $res_score2->fetch_assoc()) {
                 $sum += $row_score2['team_2_punkte'] - $row_score2['team_1_punkte'];
-                $won++;
+                if($row_score1['team_1_punkte'] < $row_score1['team_2_punkte']) $won++;
             }
             array_push($points, array($row_points['id'], $won, $sum));
         }
