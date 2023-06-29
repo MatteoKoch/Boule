@@ -8,6 +8,7 @@ if(!isset($_SESSION['admin'])) {
 }
 
 require_once "db_conn.php";
+require_once "lang/de.php";
 
 ?>
 
@@ -25,7 +26,14 @@ require_once "db_conn.php";
         <div style="display: grid; gap: 50px;">
             <table class="aufstellung" style="min-width: 800px;">
                 <thead>
-                <tr><td colspan="4" style="text-align: center; font-weight: bold;">Spielstand (Runde Nr. <?= $_SESSION['runde'] ?>)</td></tr>
+                <tr>
+                    <td colspan="5" style="text-align: center;"><?= sprintf($lang['SPIEL_TITEL'], $_SESSION['runde']) ?></td>
+                </tr>
+                <tr>
+                    <td><?= $lang['SPIEL_PLATZ'] ?></td>
+                    <td colspan="2"><?= $lang['SPIEL_TEAMS'] ?></td>
+                    <td colspan="2"><?= $lang['SPIEL_PUNKTE'] ?></td>
+                </tr>
                 </thead>
                 <tbody>
                 <?php
@@ -49,6 +57,8 @@ require_once "db_conn.php";
                 for($i = 0; $i < count($teams); $i++) {
                     echo "<tr data-id='{$teams[$i][0]}'>\n";
 
+                        echo "<td style='width: 60px;'>{$teams[$i][6]}</td>\n";
+
                         echo "<td>\n";
                             $sql_team_names->bind_param("i", $teams[$i][1]);
                             $sql_team_names->execute();
@@ -63,8 +73,6 @@ require_once "db_conn.php";
                             }
                             echo "</span>\n";
                         echo "</td>\n";
-
-                        echo "<td style='width: 50px; padding: 0; text-align: center; font-weight: bold;' id='team[{$teams[$i][0]}][{$teams[$i][1]}]' contenteditable='true'>{$teams[$i][2]}</td>\n";
 
                         echo "<td>\n";
                             $sql_team_names->bind_param("i", $teams[$i][3]);
@@ -81,6 +89,8 @@ require_once "db_conn.php";
                             echo "</span>\n";
                         echo "</td>\n";
 
+                        echo "<td style='width: 50px; padding: 0; text-align: center; font-weight: bold;' id='team[{$teams[$i][0]}][{$teams[$i][1]}]' contenteditable='true'>{$teams[$i][2]}</td>\n";
+
                         echo "<td style='width: 50px; padding: 0; text-align: center; font-weight: bold;' id='team[{$teams[$i][0]}][{$teams[$i][3]}]' contenteditable='true'>{$teams[$i][4]}</td>\n";
 
                     echo "</tr>\n";
@@ -92,10 +102,11 @@ require_once "db_conn.php";
                 </tbody>
             </table>
 
-            <div class="col2 gap20">
-                <button onclick="savePoints()">Speichern</button>
-                <a onclick="savePoints(true)">Speichern und zur n&auml;chsten Runde</a>
+            <div class="col2 gap20 no-print">
+                <button onclick="window.print()"><?= $lang['SPIEL_DRUCKEN'] ?></button>
+                <button onclick="savePoints()"><?= $lang['SPIEL_SPEICHERN'] ?></button>
             </div>
+            <a onclick="savePoints(true)" class="no-print"><?= $lang['SPIEL_SPEICHERN_WEITER'] ?></a>
 
         </div>
 

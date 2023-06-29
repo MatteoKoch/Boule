@@ -4,7 +4,7 @@ body {
     margin: 0;
     display: flex;
     justify-content: center;
-    min-height: 100vh;
+    /*min-height: 100vh;*/
     width: 100%;
 }
 
@@ -21,10 +21,22 @@ body {
     font-family: 'Helvetica';
 }
 
+@media print
+{
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
+
 table {
     border: 4px solid #333;
     /*min-width: 800px;*/
     background: #f6f6fa;
+}
+
+table thead td {
+    font-weight: bold;
 }
 
 table td {
@@ -102,13 +114,10 @@ form {
     gap: 6px;
 }
 
-.aufstellung tbody tr {
-    cursor: pointer;
-}
-
-.aufstellung tbody tr td:hover {
+.aufstellung tbody tr td[contenteditable="true"]:hover {
     background: #dadada;
     border: 3px solid #0a0a0a;
+    cursor: text;
 }
 
 .aufstellung tbody tr td {

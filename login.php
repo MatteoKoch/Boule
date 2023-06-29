@@ -7,6 +7,8 @@ if(isset($_SESSION['admin']) && $_SESSION['admin']) {
     die();
 }
 
+require_once "lang/de.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -15,12 +17,12 @@ if(isset($_SESSION['admin']) && $_SESSION['admin']) {
         <title>Boule-Turnier Login</title>
         <link href="styles/style.css" rel="stylesheet" type="text/css">
     </head>
-    <body>
+    <body style="background: #b6b6ba;">
 
         <form action="login_check.php" method="post">
-            <label for="password">Passwort</label>
+            <label for="password"><?= $lang['LOGIN_PASSWORT'] ?></label>
             <input type="password" name="password" required>
-            <button type="submit">Einloggen</button>
+            <button type="submit"><?= $lang['LOGIN_PASSWORT_OK'] ?></button>
         </form>
 
     </body>

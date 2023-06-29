@@ -2,12 +2,12 @@
 
 session_start();
 
-require_once "lang/de.php";
-
 if(!isset($_SESSION['admin'])) {
     header("Location: login");
     die();
 }
+
+require_once "lang/de.php";
 
 ?>
 
@@ -29,14 +29,15 @@ if(!isset($_SESSION['admin'])) {
         <form>
             <div class="form-wrapper">
                 <div class="team-block">
-                    <label for="teamname">Name des Teams</label>
-                    <input type="text" name="team[]" placeholder="Teamname" required>
-                    <label>Mitglieder</label>
+                    <label for="teamname"><?= $lang['TEAMS_ERSTELLEN_NAME'] ?></label>
+                    <input type="text" name="team[]" placeholder="<?= $lang['TEAMS_ERSTELLEN_TEAM_PLACEHOLDER'] ?>" required>
+                    <label><?= $lang['TEAMS_ERSTELLEN_MEMBERS'] ?></label>
                     <div class="team-members"></div>
                 </div>
             </div>
             <button type="button" onclick="addTeam()"><?= $lang['TEAMS_ERSTELLEN_SPEICHERN'] ?></button>
-            <a href="create_games.php">Weiter zur Aufstellung</a>
+            <a href="create_games.php"><?= $lang['TEAMS_ERSTELLEN_WEITER'] ?></a>
+
         </form>
 
     </body>

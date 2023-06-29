@@ -8,6 +8,7 @@ if(!isset($_SESSION['admin'])) {
 }
 
 require_once "db_conn.php";
+require_once "lang/de.php";
 
 ?>
 
@@ -24,11 +25,11 @@ require_once "db_conn.php";
 <div style="display: grid; gap: 50px;">
     <table class="spiel" style="min-width: 800px;">
         <thead>
-        <tr><td colspan="3" style="text-align: center; font-weight: bold;">Rangliste (Runde Nr. <?= $_SESSION['runde'] ?>)</td></tr>
+        <tr><td colspan="3" style="text-align: center; font-weight: bold;"><?= sprintf($lang['RANGLISTE_TITEL'], $_SESSION['runde']) ?></td></tr>
         <tr>
-            <td style="font-weight: bold">Position</td>
-            <td style="font-weight: bold">Team</td>
-            <td style="font-weight: bold">Punkte</td>
+            <td style="font-weight: bold"><?= $lang['RANGLISTE_POSITION'] ?></td>
+            <td style="font-weight: bold"><?= $lang['RANGLISTE_TEAM'] ?></td>
+            <td style="font-weight: bold"><?= $lang['RANGLISTE_PUNKTE'] ?></td>
         </tr>
         </thead>
         <tbody>
@@ -40,6 +41,20 @@ require_once "db_conn.php";
         $sql_all_teams->close();
 
         $points = array();
+
+        //Sortierpriorität 1 (Anzahl der gew. Spiele)
+        //SELECT count(*) FROM `spiele` WHERE team_1_id = ? AND team_1_punkte > team_2_punkte
+        //SELECT count(*) FROM `spiele` WHERE team_2_id = ? AND team_2_punkte > team_1_punkte
+
+        //Sortierpriorität 2 (Summe aus Differenzen)
+        //SELECT team_1_punkte, team_2_punkte FROM `spiele` WHERE team_1_id = ? AND team_1_punkte > team_2_punkte
+        //SELECT team_1_punkte, team_2_punkte FROM `spiele` WHERE team_2_id = ? AND team_2_punkte > team_1_punkte
+
+        //STRUKTUR
+        //0:
+        //  - Team Id
+        //  - Gew. Spiele
+        //  - Summe der Differenz der Punkte der gew. Spiele
 
         while($row_points = $res_all_teams->fetch_assoc()) {
             $sum = 0;
@@ -96,8 +111,8 @@ require_once "db_conn.php";
         </tbody>
     </table>
 
-    <div class="col2 gap20">
-        <a href="drucken"">Rangliste drucken</a>
+    <div class="col2 gap20 no-print">
+        <button onclick="window.print();"><?= $lang['RANGLISTE_DRUCKEN'] ?></button>
         <form action="create_games.php" method="post">
             <?php
             foreach($points as $key => $team) {
@@ -105,7 +120,7 @@ require_once "db_conn.php";
                 echo "<input type='hidden' name='points[{$key}][1]' value='{$team[1]}'>\n";
             }
             ?>
-            <button type="submit">Weiter zur n&auml;chsten Runde</button>
+            <button type="submit"><?= $lang['RANGLISTE_WEITER'] ?></button>
         </form>
     </div>
 
