@@ -25,11 +25,12 @@ require_once "lang/de.php";
 <div style="display: grid; gap: 50px;">
     <table class="spiel" style="min-width: 800px;">
         <thead>
-        <tr><td colspan="3" style="text-align: center; font-weight: bold;"><?= sprintf($lang['RANGLISTE_TITEL'], $_SESSION['runde']) ?></td></tr>
+        <tr><td colspan="4" style="text-align: center;"><?= sprintf($lang['RANGLISTE_TITEL'], $_SESSION['runde']) ?></td></tr>
         <tr>
-            <td style="font-weight: bold"><?= $lang['RANGLISTE_POSITION'] ?></td>
-            <td style="font-weight: bold"><?= $lang['RANGLISTE_TEAM'] ?></td>
-            <td style="font-weight: bold"><?= $lang['RANGLISTE_PUNKTE'] ?></td>
+            <td><?= $lang['RANGLISTE_POSITION'] ?></td>
+            <td><?= $lang['RANGLISTE_TEAM'] ?></td>
+            <td><?= $lang['RANGLISTE_GEW_SPIELE'] ?></td>
+            <td><?= $lang['RANGLISTE_PUNKTE'] ?></td>
         </tr>
         </thead>
         <tbody>
@@ -42,15 +43,12 @@ require_once "lang/de.php";
 
         $points = array();
 
-        //Sortierpriorität 1 (Anzahl der gew. Spiele)
-        //SELECT count(*) FROM `spiele` WHERE team_1_id = ? AND team_1_punkte > team_2_punkte
-        //SELECT count(*) FROM `spiele` WHERE team_2_id = ? AND team_2_punkte > team_1_punkte
+        //AKTUELL:
+        //0:
+        //  - Team Id
+        //  - Punkte
 
-        //Sortierpriorität 2 (Summe aus Differenzen)
-        //SELECT team_1_punkte, team_2_punkte FROM `spiele` WHERE team_1_id = ? AND team_1_punkte > team_2_punkte
-        //SELECT team_1_punkte, team_2_punkte FROM `spiele` WHERE team_2_id = ? AND team_2_punkte > team_1_punkte
-
-        //STRUKTUR
+        //NEUE STRUKTUR:
         //0:
         //  - Team Id
         //  - Gew. Spiele
@@ -58,16 +56,37 @@ require_once "lang/de.php";
 
         while($row_points = $res_all_teams->fetch_assoc()) {
             $sum = 0;
-            for($i = 1; $i < 3; $i++) {
-                $sql_points = $conn->prepare("SELECT sum(team_{$i}_punkte) as anz FROM spiele WHERE team_{$i}_id = ?");
-                $sql_points->bind_param("i", $row_points['id']);
-                $sql_points->execute();
-                $res_points = $sql_points->get_result();
-                while($row_points2 = $res_points->fetch_assoc()) {
-                    $sum += $row_points2['anz'];
+            $won = 0;
+            $sql_score1 = $conn->prepare("SELECT team_1_punkte, team_2_punkte FROM spiele WHERE team_1_id = ? AND team_1_punkte > team_2_punkte");
+            $sql_score1->bind_param("i", $row_points['id']);
+            $sql_score1->execute();
+            $res_score1 = $sql_score1->get_result();
+            while($row_score1 = $res_score1->fetch_assoc()) {
+                $sum += $row_score1['team_1_punkte'] - $row_score1['team_2_punkte'];
+                $won++;
+            }
+            $sql_score2 = $conn->prepare("SELECT team_1_punkte, team_2_punkte FROM spiele WHERE team_2_id = ? AND team_1_punkte < team_2_punkte");
+            $sql_score2->bind_param("i", $row_points['id']);
+            $sql_score2->execute();
+            $res_score2 = $sql_score2->get_result();
+            while($row_score2 = $res_score2->fetch_assoc()) {
+                $sum += $row_score2['team_2_punkte'] - $row_score2['team_1_punkte'];
+                $won++;
+            }
+            array_push($points, array($row_points['id'], $won, $sum));
+        }
+
+        function bubbleSort($arr) {
+            for($i = 0; $i < count($arr)-1; $i++) {
+                for($j = $i+1; $j < count($arr); $j++) {
+                    if($arr[$i][1] == $arr[$j][1] && $arr[$i][2] < $arr[$j][2]) {
+                        $save = $arr[$i];
+                        $arr[$i] = $arr[$j];
+                        $arr[$j] = $save;
+                    }
                 }
             }
-            array_push($points, array($row_points['id'], $sum));
+            return $arr;
         }
 
         function cmp($a, $b) {
@@ -76,6 +95,7 @@ require_once "lang/de.php";
 
         uasort($points, "cmp");
         $points = array_reverse($points);
+        $points = bubbleSort($points);
 
         $sql_team_names = $conn->prepare("SELECT * FROM teams WHERE id = ?");
         $sql_members = $conn->prepare("SELECT * FROM teams_mitglieder WHERE teams_id = ?");
@@ -101,6 +121,7 @@ require_once "lang/de.php";
             echo "</td>\n";
 
             echo "<td style='width: 100px; font-weight: bold; text-align: right;'>{$team[1]}</td>\n";
+            echo "<td style='width: 100px; font-weight: bold; text-align: right;'>{$team[2]}</td>\n";
 
             echo "</tr>\n";
         }

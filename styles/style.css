@@ -23,6 +23,10 @@ body {
 
 @media print
 {
+    body {
+        padding: 20px !important;
+    }
+
     .no-print, .no-print *
     {
         display: none !important;
