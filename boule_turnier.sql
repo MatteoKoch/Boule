@@ -61,7 +61,8 @@ CREATE TABLE `spiele_backup` (
 
 CREATE TABLE `teams` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL
+  `name` text NOT NULL,
+  `erstellt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -72,7 +73,8 @@ CREATE TABLE `teams` (
 
 CREATE TABLE `teams_backup` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL
+  `name` text NOT NULL,
+  `erstellt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -84,7 +86,8 @@ CREATE TABLE `teams_backup` (
 CREATE TABLE `teams_mitglieder` (
   `id` int(11) NOT NULL,
   `teams_id` int(11) DEFAULT NULL,
-  `mitglied` text DEFAULT NULL
+  `mitglied` text DEFAULT NULL,
+  `erstellt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -96,7 +99,8 @@ CREATE TABLE `teams_mitglieder` (
 CREATE TABLE `teams_mitglieder_backup` (
   `id` int(11) NOT NULL,
   `teams_id` int(11) DEFAULT NULL,
-  `mitglied` text DEFAULT NULL
+  `mitglied` text DEFAULT NULL,
+  `erstellt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
